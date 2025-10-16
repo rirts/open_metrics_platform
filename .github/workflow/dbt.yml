@@ -1,0 +1,63 @@
+name: dbt-build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: dbt-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: analytics
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd="pg_isready -U postgres -d analytics"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+
+    env:
+      DBT_PROFILES_DIR: profiles   # usa profiles/profiles.yml del repo
+      METABASE_URL: "http://localhost:3000"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dbt-postgres
+        run: |
+          python -m pip install --upgrade pip
+          pip install "dbt-postgres>=1.10,<1.11"
+
+      - name: Show versions
+        run: dbt --version
+
+      - name: Seed, Build, Docs (CI indices OFF)
+        working-directory: dbt_project
+        run: |
+          dbt clean
+          dbt deps
+          dbt seed  --target ci
+          dbt build --target ci --fail-fast --vars "{apply_indexes: false}"
+          dbt docs generate --target ci
+
+      - name: Upload dbt docs/artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-target
+          path: dbt_project/target

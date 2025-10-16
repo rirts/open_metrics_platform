@@ -1,0 +1,11 @@
+# Fuerza LF para código y textos
+*           text=auto eol=lf
+*.sql       text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.py        text eol=lf
+*.md        text eol=lf
+
+# (opcional) Si usas scripts Windows, déjalos en CRLF
+# *.bat     text eol=crlf
+# *.cmd     text eol=crlf

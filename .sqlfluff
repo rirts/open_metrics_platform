@@ -1,0 +1,17 @@
+[sqlfluff]
+dialect = postgres
+templater = dbt
+max_line_length = 120
+
+[sqlfluff:templater:dbt]
+project_dir = dbt_project
+profiles_dir = profiles
+
+[sqlfluff:rules]
+exclude_rules = L003,L006,L010,L014,L016,ST07,RF04,AL01
+
+[sqlfluff:rules:references.keywords]
+ignore_words = month
+
+[sqlfluff:rules:aliasing.table]
+require_as_for_table_aliases = True

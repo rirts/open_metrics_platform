@@ -1,0 +1,32 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: mixed-line-ending
+      - id: detect-private-key
+
+  # Lint de SQL con SQLFluff sobre tu carpeta dbt_project
+  - repo: local
+    hooks:
+      - id: sqlfluff-lint
+        name: sqlfluff lint (dbt_project)
+        entry: sqlfluff lint
+        language: system
+        pass_filenames: true
+        types_or: [sql]
+        files: ^dbt_project/(models|macros)/.*\.sql$
+        stages: [commit]
+
+
+
+# Opcional: ignora CSVs y artefactos globalmente
+exclude: |
+  (?x)^(
+      dbt_project/(target|logs|dbt_packages)/|
+      .*\.csv$
+  )

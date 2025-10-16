@@ -1,0 +1,4 @@
+kpi,definition,formula,grain,owner,acceptable_range
+aov,Average order value,SUM(revenue)/COUNT_DISTINCT(order_id),month,analytics@company.com,>=0
+price_per_item,Average price per item,SUM(revenue)/SUM(items),month,analytics@company.com,>=0
+items_per_order,Items per order,SUM(items)/COUNT_DISTINCT(order_id),month,analytics@company.com,0-100

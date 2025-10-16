@@ -1,0 +1,211 @@
+version: 2
+
+models:
+  - name: int_olist__orders
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: order_date
+        tests: [not_null]
+  - name: mart_olist__yoy_anomalies
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: month
+        data_type: date
+        tests: [not_null, unique]
+      - name: revenue
+        data_type: numeric(18,2)
+      - name: revenue_ma_3m
+        data_type: numeric(18,2)
+      - name: prev12_ma3
+        data_type: numeric(18,2)
+      - name: yoy_raw
+        data_type: numeric(18,4)
+      - name: yoy_capped
+        data_type: numeric(18,4)
+      - name: was_base_small
+        data_type: boolean
+      - name: was_capped_low
+        data_type: boolean
+      - name: was_capped_high
+        data_type: boolean
+
+  - name: int_olist__order_items
+    columns:
+      - name: order_id
+        tests: [not_null]
+      - name: order_item_id
+        tests: [not_null]
+      - name: item_total
+        tests: [not_null]
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - order_id
+              - order_item_id
+
+
+  - name: mart_olist__sales_daily
+    columns:
+      - name: order_date
+        tests: [not_null, unique]
+      - name: orders
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: items
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: revenue
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: freight
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: aov
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+  - name: mart_olist__monthly_growth
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: month
+        data_type: date
+        tests: [not_null, unique]
+      - name: revenue
+        data_type: numeric(18,2)
+      - name: revenue_ma_3m
+        data_type: numeric(18,2)
+      - name: mom_pct
+        data_type: numeric(18,4)
+      - name: yoy_ma3_pct
+        data_type: numeric(18,4)
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: -1.0
+                max_value: 2.0
+
+
+  - name: mart_olist__sales_monthly
+    columns:
+      - name: month
+        tests: [not_null, unique]
+      - name: orders
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: items
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: revenue
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: freight
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+  - name: mart_olist__monthly_kpis
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: month
+        data_type: date
+        tests: [not_null, unique]
+      - name: orders
+        data_type: bigint
+      - name: items
+        data_type: bigint
+      - name: revenue
+        data_type: numeric(18,2)
+      - name: freight
+        data_type: numeric(18,2)
+      - name: aov
+        data_type: numeric(18,2)
+      - name: price_per_item
+        data_type: numeric(18,4)
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: items_per_order
+        data_type: numeric(18,4)
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 100
+      - name: revenue_ma_3m
+        data_type: numeric(18,2)
+
+exposures:
+  - name: metabase_olist_revenue_exec
+    type: dashboard
+    maturity: high
+    url: "http://localhost:3000/dashboard/2-open-metrics-monthly-sales?order_date=2016-01-01~2018-07-31"
+    owner:
+      name: Data Analytics
+      email: rafartejadasegura@gmail.com
+    depends_on:
+      - ref('mart_olist__monthly_kpis')
+      - ref('mart_olist__monthly_growth')
+    description: >
+      Dashboard ejecutivo de Olist en Metabase con KPIs mensuales, MA(3) y YoY(MA3) capado.
+
+tests:
+  - monthly_equals_daily:
+      model: ref('mart_olist__sales_monthly')   # para que el test se “ata” a este nodo
+      monthly_model: mart_olist__sales_monthly
+      daily_model: mart_olist__sales_daily
+      month_col: "month"
+      date_col: "order_date"
+      metric_col: "revenue"
+      tolerance_pct: 0.0001   # 0.01%
+
+  - monthly_equals_daily:
+      model: ref('mart_olist__sales_monthly')
+      monthly_model: mart_olist__sales_monthly
+      daily_model: mart_olist__sales_daily
+      month_col: "month"
+      date_col: "order_date"
+      metric_col: "items"
+      tolerance_pct: 0.0001
+
+  - monthly_equals_daily:
+      model: ref('mart_olist__sales_monthly')
+      monthly_model: mart_olist__sales_monthly
+      daily_model: mart_olist__sales_daily
+      month_col: "month"
+      date_col: "order_date"
+      metric_col: "orders"
+      tolerance_pct: 0.0001
+
+  - monthly_equals_daily:
+      model: ref('mart_olist__sales_monthly')
+      monthly_model: mart_olist__sales_monthly
+      daily_model: mart_olist__sales_daily
+      month_col: "month"
+      date_col: "order_date"
+      metric_col: "freight"
+      tolerance_pct: 0.0001

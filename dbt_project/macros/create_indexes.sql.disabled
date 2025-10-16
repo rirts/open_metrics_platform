@@ -1,0 +1,47 @@
+{% macro create_indexes(schema='analytics_analytics_raw', also_marts=false) %}
+
+  {# --- Índices en tablas RAW (fuente) --- #}
+  {% set raw_indexes = [
+    {'table': 'olist_orders_dataset',            'cols': ['order_id', 'customer_id', 'order_purchase_timestamp']},
+    {'table': 'olist_order_items_dataset',       'cols': ['order_id', 'product_id', 'seller_id']},
+    {'table': 'olist_order_payments_dataset',    'cols': ['order_id']},
+    {'table': 'olist_order_reviews_dataset',     'cols': ['order_id', 'review_id']},
+    {'table': 'olist_products_dataset',          'cols': ['product_id']},
+    {'table': 'olist_sellers_dataset',           'cols': ['seller_id']},
+    {'table': 'olist_customers_dataset',         'cols': ['customer_id']}
+  ] %}
+
+  {% for t in raw_indexes %}
+    {% for c in t.cols %}
+      {% set idxname = 'idx_' ~ t.table ~ '_' ~ c %}
+      {% set sql %}
+        create index if not exists {{ idxname }}
+        on {{ schema }}.{{ t.table }} ({{ c }});
+      {% endset %}
+      {% do log(sql, info=True) %}
+      {% if execute %}{% do run_query(sql) %}{% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {# --- (Opcional) Índices en tablas de marts (pequeñas, pero por si acaso) --- #}
+  {% if also_marts %}
+    {% set marts_schema = 'analytics_analytics' %}
+    {% set marts_indexes = [
+      {'table': 'mart_olist__sales_daily',   'cols': ['order_date']},
+      {'table': 'mart_olist__sales_monthly', 'cols': ['month']}
+    ] %}
+    {% for t in marts_indexes %}
+      {% for c in t.cols %}
+        {% set idxname = 'idx_' ~ t.table ~ '_' ~ c %}
+        {% set sql %}
+          create index if not exists {{ idxname }}
+          on {{ marts_schema }}.{{ t.table }} ({{ c }});
+        {% endset %}
+        {% do log(sql, info=True) %}
+        {% if execute %}{% do run_query(sql) %}{% endif %}
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+
+  {% do log('✅ Indexes ensured.', info=True) %}
+{% endmacro %}

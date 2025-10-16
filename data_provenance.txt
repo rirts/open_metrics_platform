@@ -1,0 +1,17 @@
+# Data Provenance — Olist
+
+**Dataset:** Brazilian E-Commerce Public Dataset by Olist
+**Publisher/Owner:** Olist (`olistbr`) — Kaggle
+**Official page:** https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+**Temporal coverage:** 2016–2018 (≈100k orders)
+**Tables used:** orders, order_items, order_payments, order_reviews, customers, sellers, products, geolocation, product_category_name_translation
+**License/Terms:** ver página oficial de Kaggle (puede requerir login).
+**Acquisition method in this repo:** vendorizado vía CSV en `dbt_project/seeds/` para reproducibilidad; no se usa Kaggle API en ejecución.
+
+> Nota: Olist es una plataforma/marketplace que conecta **múltiples vendedores** a múltiples marketplaces; no es una sola tienda. Este dataset refleja ventas de **Olist Store** en ese contexto (2016–2018), con datos reales y anonimizados.
+
+**Accessed on:** <pon la fecha>
+**Commit introducing these files:** <pon el commit SHA>
+
+## Files & Checksums (SHA256)
+Pega aquí la tabla de hashes generada (ver paso 2).

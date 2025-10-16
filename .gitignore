@@ -1,0 +1,46 @@
+# ── Secrets / env ───────────────────────────────────────────
+.env
+*.env.local
+profiles/.user.yml
+
+# ── Python / venv / tooling ─────────────────────────────────
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.mypy_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+dist/
+build/
+
+# ── OS cruft ────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editors / IDEs ─────────────────────────────────────────
+.vscode/
+.idea/
+
+# ── dbt artifacts (generated) ──────────────────────────────
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
+dbt_project/*/target/
+dbt_project/*/logs/
+
+# optional: compiled SQL if you ever enable it
+dbt_project/compiled/
+
+# ── Metabase (if ever using H2 locally; not in your setup) ─
+metabase.db.mv.db
+metabase.db.trace.db
+
+# ── Docker (local state) ───────────────────────────────────
+# (compose volumes are external; nothing to ignore here usually)
+
+.sqlfluffcache
+*.log

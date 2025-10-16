@@ -1,0 +1,13 @@
+﻿open_metrics:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: 127.0.0.1
+      port: 5432
+      user: metabase
+      password: analytics_pwd
+      dbname: metabase        # <-- antes decía analytics; ahora usamos la DB que sí existe
+      schema: analytics       # <-- el schema que acabamos de crear
+      threads: 4
+      sslmode: disable

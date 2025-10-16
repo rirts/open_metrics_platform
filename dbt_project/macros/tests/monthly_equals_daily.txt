@@ -1,0 +1,31 @@
+{% test monthly_equals_daily(model, monthly_model, daily_model, month_col, date_col, metric_col, tolerance_pct=0.001) %}
+
+with monthly as (
+  select {{ month_col }}::date as month, {{ metric_col }}::numeric as metric
+  from {{ ref(monthly_model) }}
+),
+daily as (
+  select date_trunc('month', {{ date_col }})::date as month, sum({{ metric_col }})::numeric as metric
+  from {{ ref(daily_model) }}
+  group by 1
+),
+joined as (
+  select
+    coalesce(m.month, d.month) as month,
+    m.metric as monthly_metric,
+    d.metric as daily_agg_metric,
+    case
+      when coalesce(d.metric,0) = 0 then null
+      else abs(m.metric - d.metric) / nullif(d.metric,0)
+    end as rel_diff
+  from monthly m
+  full outer join daily d using (month)
+)
+select *
+from joined
+where
+  -- dif. relativa mayor a tolerancia o nulos desalineados
+  (rel_diff is null and (monthly_metric is null) <> (daily_agg_metric is null))
+  or (rel_diff is not null and rel_diff > {{ tolerance_pct }});
+
+{% endtest %}
