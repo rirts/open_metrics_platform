@@ -4,10 +4,21 @@
     dev:
       type: postgres
       host: 127.0.0.1
-      port: 5432
+      port: 5433
       user: metabase
       password: analytics_pwd
-      dbname: metabase        # <-- antes decía analytics; ahora usamos la DB que sí existe
-      schema: analytics       # <-- el schema que acabamos de crear
+      dbname: metabase
+      schema: analytics
+      threads: 4
+      sslmode: disable
+
+    ci:
+      type: postgres
+      host: 127.0.0.1
+      port: 5432
+      user: postgres
+      password: postgres
+      dbname: analytics
+      schema: analytics
       threads: 4
       sslmode: disable
