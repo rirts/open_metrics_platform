@@ -63,7 +63,7 @@ dbt_project/
 
 ## Seeds
 
-- `olist_*_dataset.csv` families (customers, orders, order_items, payments, products, sellers, reviews, geolocation)
+- `olist_*_dataset.csv` families (customers, orders, order_items, payments, products, sellers, reviews)
 - `params_yoy.csv` (single row: `yoy_floor`, `yoy_cap`, `min_base`)
 - `product_category_name_translation.csv`
 - `kpi_dictionary.csv`
