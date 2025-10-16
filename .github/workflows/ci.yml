@@ -23,7 +23,7 @@ jobs:
 
     env:
       # usa tu profiles/profiles.yml del repo
-      DBT_PROFILES_DIR: ./profiles
+      DBT_PROFILES_DIR: ${{ github.workspace }}/profiles
       # fuerza a usar el target "ci" (sin tocar tu local)
       DBT_TARGET: ci
 
