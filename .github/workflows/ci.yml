@@ -55,4 +55,8 @@ jobs:
         run: dbt parse
 
       - name: Lint SQL (SQLFluff)
+        env:
+          SQLFLUFF_DBT_PROFILES_DIR: ${{ github.workspace }}/profiles
+          SQLFLUFF_DBT_PROFILE: open_metrics
+          SQLFLUFF_DBT_TARGET_NAME: ci
         run: sqlfluff lint dbt_project --config ./.sqlfluff
