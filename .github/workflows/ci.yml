@@ -55,7 +55,7 @@ jobs:
 
       - name: dbt parse (no DB writes)
         working-directory: ./dbt_project
-        run: dbt parse
+        run: dbt parse 
 
       - name: Lint SQL (SQLFluff)
         run: sqlfluff lint dbt_project --config ./.sqlfluff
