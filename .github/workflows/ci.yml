@@ -8,7 +8,6 @@ jobs:
   lint-and-parse:
     runs-on: ubuntu-latest
 
-    # Postgres efímero para que el templater de dbt no falle
     services:
       postgres:
         image: postgres:16
@@ -22,10 +21,7 @@ jobs:
           --health-interval=10s --health-timeout=5s --health-retries=10
 
     env:
-      # usa tu profiles/profiles.yml del repo
       DBT_PROFILES_DIR: ${{ github.workspace }}/profiles
-      # fuerza a usar el target "ci" (sin tocar tu local)
-      DBT_TARGET: ci
 
     steps:
       - uses: actions/checkout@v4
@@ -37,8 +33,11 @@ jobs:
       - name: Install deps (dbt + sqlfluff)
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          # Nos aseguramos de tener sqlfluff y templater (por si no están en requirements.txt)
+          # usa requirements.txt si lo tienes; si no, instala explícito:
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+          pip install "dbt-core==1.10.11" "dbt-postgres==1.10.11"
           pip install "sqlfluff==3.*" "sqlfluff-templater-dbt==3.*"
 
       - name: Wait for Postgres
@@ -55,7 +54,7 @@ jobs:
 
       - name: dbt parse (no DB writes)
         working-directory: ./dbt_project
-        run: dbt parse 
+        run: dbt parse
 
       - name: Lint SQL (SQLFluff)
         run: sqlfluff lint dbt_project --config ./.sqlfluff
