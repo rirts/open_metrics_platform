@@ -45,6 +45,11 @@ jobs:
             sleep 2
           done
           echo "Postgres no respondió a tiempo"; exit 1
+      
+      - name: Force profiles.yml target=ci (CI only)
+        run: |
+          sed -i 's/^  target: dev/  target: ci/' profiles/profiles.yml
+          echo "Using target:"; grep '^[ ]*target:' -n profiles/profiles.yml
 
       - name: dbt deps
         working-directory: ./dbt_project
