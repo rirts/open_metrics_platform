@@ -5,17 +5,44 @@ sources:
     database: "{{ target.database }}"
     schema: "{{ target.schema }}"
     tables:
+      # orders
       - name: orders
         identifier: olist_orders_dataset
+      - name: olist_orders_dataset
+        identifier: olist_orders_dataset
+
+      # order_items
       - name: order_items
         identifier: olist_order_items_dataset
+      - name: olist_order_items_dataset
+        identifier: olist_order_items_dataset
+
+      # customers
       - name: customers
         identifier: olist_customers_dataset
+      - name: olist_customers_dataset
+        identifier: olist_customers_dataset
+
+      # payments
       - name: payments
         identifier: olist_order_payments_dataset
+      - name: olist_order_payments_dataset
+        identifier: olist_order_payments_dataset
+
+      # products
       - name: products
         identifier: olist_products_dataset
+      - name: olist_products_dataset
+        identifier: olist_products_dataset
+
+      # sellers
       - name: sellers
         identifier: olist_sellers_dataset
+      - name: olist_sellers_dataset
+        identifier: olist_sellers_dataset
+
+      # reviews
       - name: order_reviews
+        identifier: olist_order_reviews_dataset
+      - name: olist_order_reviews_dataset
         identifier: olist_order_reviews_dataset
