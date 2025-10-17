@@ -21,4 +21,5 @@ models:
 
 seeds:
   open_metrics_project:
-    +schema: analytics_raw
+    +schema: raw
+

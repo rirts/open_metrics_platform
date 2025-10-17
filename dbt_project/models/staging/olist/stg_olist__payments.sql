@@ -1,5 +1,5 @@
-with src as (
-    select * from {{ source('olist','olist_order_payments_dataset') }}
+﻿with src as (
+    select * from {{ source('olist','payments') }}
 )
 
 select

@@ -1,4 +1,4 @@
--- int_orders: normaliza tiempos y campos base por orden
+﻿-- int_orders: normaliza tiempos y campos base por orden
 with o as (
     select *
     from {{ ref('stg_olist__orders') }}

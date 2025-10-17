@@ -1,4 +1,4 @@
--- int_order_items: enriquece items con totales y joins ligeros
+﻿-- int_order_items: enriquece items con totales y joins ligeros
 with oi as (
     select *
     from {{ ref('stg_olist__order_items') }}
