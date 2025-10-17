@@ -2,14 +2,20 @@
 
 sources:
   - name: olist
-    schema: analytics_analytics_raw
+    database: "{{ target.database }}"
+    schema: "{{ target.schema }}"
     tables:
-      - name: olist_orders_dataset
-      - name: olist_order_items_dataset
-      - name: olist_customers_dataset
-      - name: olist_order_payments_dataset
-      - name: olist_order_reviews_dataset
-      - name: olist_products_dataset
-      - name: olist_sellers_dataset
-      - name: olist_geolocation_dataset
-      - name: product_category_name_translation
+      - name: orders
+        identifier: olist_orders_dataset
+      - name: order_items
+        identifier: olist_order_items_dataset
+      - name: customers
+        identifier: olist_customers_dataset
+      - name: payments
+        identifier: olist_order_payments_dataset
+      - name: products
+        identifier: olist_products_dataset
+      - name: sellers
+        identifier: olist_sellers_dataset
+      - name: order_reviews
+        identifier: olist_order_reviews_dataset
