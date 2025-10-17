@@ -3,7 +3,7 @@
 sources:
   - name: olist
     database: "{{ target.database }}"
-    schema: "{{ target.schema }}"
+    schema: "{{ target.schema }}_raw"
     tables:
       # orders
       - name: orders
