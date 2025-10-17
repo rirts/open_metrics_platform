@@ -1,4 +1,4 @@
-﻿with src as (
+with src as (
     select * from {{ source('olist','orders') }}
 )
 

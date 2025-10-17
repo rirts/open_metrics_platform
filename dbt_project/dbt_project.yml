@@ -22,4 +22,3 @@ models:
 seeds:
   open_metrics_project:
     +schema: raw
-

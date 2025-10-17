@@ -1,4 +1,4 @@
-﻿-- mart_sales_daily: KPIs diarios (ordenes, Ã­tems, revenue, freight, AOV)
+-- mart_sales_daily: KPIs diarios (ordenes, Ã­tems, revenue, freight, AOV)
 
 {{ config(
   materialized='table',

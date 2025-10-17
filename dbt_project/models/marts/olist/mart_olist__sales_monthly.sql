@@ -1,4 +1,4 @@
-﻿{{ config(
+{{ config(
   materialized='table',
   post_hook=[
     "create index if not exists idx_mart_olist__sales_monthly_month on {{ this }} (month)"
