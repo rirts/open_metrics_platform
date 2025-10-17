@@ -175,7 +175,7 @@ exposures:
 
 tests:
   - monthly_equals_daily:
-      model: ref('mart_olist__sales_monthly')   # para que el test se “ata” a este nodo
+      model: ref('mart_olist__sales_monthly')   # para que el test se â€œataâ€ a este nodo
       monthly_model: mart_olist__sales_monthly
       daily_model: mart_olist__sales_daily
       month_col: "month"
