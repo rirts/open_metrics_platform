@@ -173,6 +173,31 @@ exposures:
     description: >
       Dashboard ejecutivo de Olist en Metabase con KPIs mensuales, MA(3) y YoY(MA3) capado.
 
+  - name: metabase_olist_cohorts
+    type: dashboard
+    maturity: medium
+    url: "http://localhost:3000/dashboard/3-open-metrics-cohorts"
+    owner:
+      name: Data Analytics
+      email: rafartejadasegura@gmail.com
+    depends_on:
+      - ref('mart_olist__monthly_kpis')
+    description: >
+      Dashboard de cohorts de clientes de Olist (nuevos vs recurrentes, revenue por cohorte y retención).
+
+  - name: metabase_olist_yoy_anomalies
+    type: dashboard
+    maturity: medium
+    url: "http://localhost:3000/dashboard/4-open-metrics-yoy-anomalies"
+    owner:
+      name: Data Analytics
+      email: rafartejadasegura@gmail.com
+    depends_on:
+      - ref('mart_olist__monthly_kpis')
+      - ref('mart_olist__monthly_growth')
+    description: >
+      Dashboard para analizar anomalías YoY en ventas, con énfasis en outliers y periodos atípicos.
+
 tests:
   - monthly_equals_daily:
       model: ref('mart_olist__sales_monthly')   # para que el test se â€œataâ€ a este nodo
