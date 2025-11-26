@@ -23,6 +23,17 @@ performance improvements (idempotent indexes) on raw tables and select marts.
 
 ---
 
+## Project assets (dbt)
+
+- Models: 14
+- Seeds: 10
+- Macros: ~550 (including package macros and custom macros)
+- Data tests: 48
+- Sources: 7
+- Exposures: 3 Metabase dashboards (executive overview, cohorts, YoY anomalies)
+
+---
+
 ## Project Structure
 ```text
 dbt_project/
@@ -70,10 +81,13 @@ dbt_project/
 
 ---
 
-## Metabase Exposure
+## Metabase Exposures
 
-- `exposures:` in `marts/olist/schema.yml` references an executive dashboard.
-  Configure the URL via the `METABASE_URL` env var (defaults to `http://localhost:3000`).
+- `exposures:` in `marts/olist/schema.yml` references three Metabase dashboards:
+  - `metabase_olist_revenue_exec`: executive monthly KPIs (MA(3), capped YoY).
+  - `metabase_olist_cohorts`: customer cohorts (new vs returning, revenue and retention).
+  - `metabase_olist_yoy_anomalies`: YoY anomalies and outliers in revenue growth.
+- URLs can be updated directly in `schema.yml` or parameterized via the `METABASE_URL` env var (default `http://localhost:3000`).
 
 ---
 
