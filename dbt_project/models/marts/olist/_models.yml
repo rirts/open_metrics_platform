@@ -1,9 +1,0 @@
-models:
-  - name: time_spine_daily
-    description: A daily time spine table with one row per day, aligned to the Olist project date range.
-    time_spine:
-      standard_granularity_column: date_day
-    columns:
-      - name: date_day
-        description: Base date column at daily granularity
-        granularity: day
