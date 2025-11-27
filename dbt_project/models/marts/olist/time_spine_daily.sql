@@ -17,6 +17,6 @@ final as (
     from base_dates
 )
 
-select *
-from final
-;
+select
+    date_day
+from final;
