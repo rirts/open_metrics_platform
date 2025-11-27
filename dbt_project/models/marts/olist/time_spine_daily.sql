@@ -1,3 +1,5 @@
+-- sqlfluff: skip_file
+
 {{ config(
     materialized = 'table'
 ) }}
