@@ -1,0 +1,50 @@
+semantic_models:
+  - name: olist_sales_daily
+    description: "Daily sales metrics for Olist; one row per day."
+    model: ref('mart_olist__sales_daily')
+
+    # Dimensión de tiempo principal
+    defaults:
+      agg_time_dimension: order_date
+
+    # Entidad lógica dueña de las dimensiones/medidas
+    entities:
+      - name: olist_day
+        type: primary
+
+    dimensions:
+      - name: order_date
+        type: time
+        type_params:
+          time_granularity: day
+
+    measures:
+      - name: daily_revenue
+        description: "Total revenue per day."
+        agg: sum
+        expr: revenue
+
+      - name: daily_orders
+        description: "Total number of orders per day."
+        agg: sum
+        expr: orders
+
+      - name: daily_items
+        description: "Total items sold per day."
+        agg: sum
+        expr: items
+
+metrics:
+  - name: total_revenue
+    description: "Total revenue across all days."
+    label: Total revenue
+    type: simple
+    type_params:
+      measure: daily_revenue
+
+  - name: total_orders
+    description: "Total number of orders."
+    label: Total orders
+    type: simple
+    type_params:
+      measure: daily_orders

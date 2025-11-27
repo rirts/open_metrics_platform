@@ -34,6 +34,21 @@ performance improvements (idempotent indexes) on raw tables and select marts.
 
 ---
 
+## dbt Semantic Layer
+
+This project defines a dbt Semantic Layer on top of the Olist marts:
+
+- **Semantic model**: `olist_sales_daily` on top of `mart_olist__sales_daily`
+  - Time dimension: `order_date` (day granularity)
+  - Measures: `daily_revenue`, `daily_orders`, `daily_items`
+- **Metrics**:
+  - `total_revenue` (simple metric on `daily_revenue`)
+  - `total_orders` (simple metric on `daily_orders`)
+- **Time spine**:
+  - `time_spine_daily` – one row per `date_day` between 2016-01-01 and 2018-12-31, declared as the project time spine for MetricFlow.
+
+---
+
 ## Project Structure
 ```text
 dbt_project/
