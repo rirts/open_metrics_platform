@@ -10,6 +10,7 @@ with base_dates as (
         )
     }}
 ),
+
 final as (
     select
         cast(date_day as date) as date_day
