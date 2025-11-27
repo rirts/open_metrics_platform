@@ -1,7 +1,6 @@
 {{ config(
     materialized = 'table'
 ) }}
-
 with base_dates as (
     {{
         dbt.date_spine(
