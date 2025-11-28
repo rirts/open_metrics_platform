@@ -47,10 +47,12 @@ models:
               - order_id
               - order_item_id
 
-
   - name: mart_olist__sales_daily
+    time_spine:
+      standard_granularity_column: order_date
     columns:
       - name: order_date
+        granularity: day
         tests: [not_null, unique]
       - name: orders
         tests:
