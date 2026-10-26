@@ -47,7 +47,7 @@ select
     revenue::numeric(18, 2) as revenue,
     freight::numeric(18, 2) as freight,
     aov::numeric(18, 2) as aov,
+    revenue_ma_3m::numeric(18, 2) as revenue_ma_3m,
     (revenue::numeric / nullif(items::numeric, 0))::numeric(18, 4) as price_per_item,
-    (items::numeric / nullif(orders::numeric, 0))::numeric(18, 4) as items_per_order,
-    revenue_ma_3m::numeric(18, 2) as revenue_ma_3m
+    (items::numeric / nullif(orders::numeric, 0))::numeric(18, 4) as items_per_order
 from enriched

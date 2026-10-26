@@ -19,7 +19,9 @@ with p as (
         yoy_floor::numeric as yoy_floor,
         yoy_cap::numeric as yoy_cap,
         min_base::numeric as min_base
-    from {{ ref('params_yoy') }} limit 1
+    from {{ ref('params_yoy') }}
+    order by yoy_floor, yoy_cap, min_base
+    limit 1
 ),
 
 m as (

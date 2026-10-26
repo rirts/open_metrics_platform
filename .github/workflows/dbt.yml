@@ -27,6 +27,8 @@ jobs:
           --health-interval=10s --health-timeout=5s --health-retries=10
 
     env:
+      DBT_SEND_ANONYMOUS_USAGE_STATS: "false"
+      DO_NOT_TRACK: "1"
       DBT_PROFILES_DIR: ${{ github.workspace }}/profiles
       METABASE_URL: "http://localhost:3000"
 

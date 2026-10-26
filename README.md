@@ -210,7 +210,7 @@ Idempotent index creation (optional but recommended).
 ### Create helper indexes on raw seeds (and optionally marts)
 
 ```bash
-dbt run-operation create_indexes --project-dir .\dbt_project --profiles-dir .\profiles --target dev --args '{schema: "analytics_analytics_raw", also_marts: true}'
+dbt run-operation ensure_olist_indexes --project-dir .\dbt_project --profiles-dir .\profiles --target dev --args '{schema: "analytics_analytics_raw", also_marts: true}'
 ```
 
 - **Raw tables**: indexes on common join/filter columns (e.g., `order_id`, `customer_id`).
@@ -281,7 +281,7 @@ dbt test --project-dir .\dbt_project --profiles-dir .\profiles --target dev --sc
 - First-time seeding loads ~1M rows; that’s expected.
 - After seeding, run helper indexes to speed downstream queries:
   ```bash
-  dbt run-operation create_indexes --project-dir .\dbt_project --profiles-dir .\profiles --target dev --args '{schema: "analytics_analytics_raw", also_marts: true}'
+  dbt run-operation ensure_olist_indexes --project-dir .\dbt_project --profiles-dir .\profiles --target dev --args '{schema: "analytics_analytics_raw", also_marts: true}'
   ```
 
 ### Post-hook / index errors (e.g., “improper qualified name”)
@@ -289,7 +289,7 @@ dbt test --project-dir .\dbt_project --profiles-dir .\profiles --target dev --sc
   ```sql
   {{ config(post_hook=['create index if not exists idx_mart_olist__sales_daily_order_date on {{ this }} (order_date)']) }}
   ```
-- For indexing **other tables** (e.g., raw seeds), use `dbt run-operation create_indexes` instead of a model post-hook.
+- For indexing **other tables** (e.g., raw seeds), use `dbt run-operation ensure_olist_indexes` instead of a model post-hook.
 
 ### Lint errors (SQLFluff)
 - **Trailing semicolons**: Remove `;` at the end of model SQL files.
@@ -366,3 +366,9 @@ This repository is **All rights reserved**.
 
 No permission is granted to use, copy, modify, or distribute this work without
 explicit written consent from the copyright holder.
+
+## Reproducible metrics and active reconciliation
+
+Core is pinned to 1.10.11. Calendar months are dense between first/last eligible sales; missing months have zero totals and undefined per-order ratios. This assumes a complete source snapshot; missing live observations must not be silently treated as zero. Annual windows now compare calendar years.
+
+Four `monthly_equals_daily` tests (revenue, freight, items, orders) are registered on the monthly mart; verify using `dbt ls --resource-type test`. `time_spine_daily` is a real dense model. `revenue` means eligible order merchandise value in BRL, not accounting revenue recognition. Metabase exposures reference local dashboards and do not recreate them in a clean installation.
