@@ -1,4 +1,6 @@
-{% macro create_indexes(schema='analytics_analytics_raw', also_marts=false) %}
+{% macro ensure_olist_indexes(schema=none, also_marts=false) %}
+
+  {% if schema is none %}{% set schema = target.schema ~ '_raw' %}{% endif %}
 
   {# --- Índices en tablas RAW (fuente) --- #}
   {% set raw_indexes = [
@@ -25,7 +27,7 @@
 
   {# --- (Opcional) Índices en tablas de marts (pequeñas, pero por si acaso) --- #}
   {% if also_marts %}
-    {% set marts_schema = 'analytics_analytics' %}
+    {% set marts_schema = target.schema ~ '_analytics' %}
     {% set marts_indexes = [
       {'table': 'mart_olist__sales_daily',   'cols': ['order_date']},
       {'table': 'mart_olist__sales_monthly', 'cols': ['month']}
